@@ -23,9 +23,14 @@ class Player {
     constructor() {
         // Load the image/sprite
         this.sprite = 'images/char-princess-girl.png';
+        // Set the step size
+        this.stepX = 101;
+        this.stepY = 83;
         // Set the initial location
-        this.xPos = 0;
-        this.yPos = 0;
+        this.initXPos = this.stepX*2;
+        this.initYPos = (this.stepY*5)-10;  // 10 px padding for centering
+        this.xPos = this.initXPos;
+        this.yPos = this.initYPos;
     }
 
     // Update the player's position
@@ -44,6 +49,28 @@ class Player {
 
     // Handle keyboard input
     handleInput(input) {
+        switch(input) {
+            case 'left':
+                if(this.xPos > 0) {
+                    this.xPos -= this.stepX;
+                }
+                break;
+            case 'up':
+                if (this.yPos > this.stepY) {
+                    this.yPos -= this.stepY;
+                }
+                break;
+            case 'right':
+                if (this.xPos < this.stepX*4) {
+                    this.xPos += this.stepX;
+                }
+                break;
+            case 'down':
+                if (this.yPos < this.stepY*4) {
+                    this.yPos += this.stepY;
+                }
+                break;
+        }
 
     }
 
@@ -52,6 +79,7 @@ class Player {
 
 // Instantiation of player and enemies
 const player = new Player();    
+const allEnemies = [];
 
 
 
