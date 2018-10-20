@@ -1,15 +1,31 @@
 // Enemies our player must avoid
 class Enemy {
-    constructor() {
+    constructor(initXPos, yPos, speed) {
         // Load the image/sprite 
         this.sprite = 'images/enemy-bug.png';
+        // Set the horizontal step size
+        this.stepX = 101;
+        // Set the movement radius
+        this.boundary = this.stepX*5;
+        // Set the speed
+        this.speed = speed;
+        // Set the initial location
+        this.initXPos = initXPos;
+        this.xPos = this.initXPos;
+        this.yPos = yPos-20;    // 20 px padding for centering
+        
     }
     
     // Update the enemy's position 
     update(dt) {
-        // You should multiply any movement by the dt parameter
-        // which will ensure the game runs at the same speed for
-        // all computers.
+        // Enemy moves until off screen
+        if(this.xPos < this.boundary) {
+            this.xPos += this.speed*dt;
+        } 
+        // Then reset its position
+        else {
+            this.xPos = this.initXPos;
+        }
     }
 
     // Draw the enemy on the screen
@@ -23,7 +39,7 @@ class Player {
     constructor() {
         // Load the image/sprite
         this.sprite = 'images/char-princess-girl.png';
-        // Set the step size
+        // Set the horizontal and vertical step size
         this.stepX = 101;
         this.stepY = 83;
         // Set the initial location
@@ -80,8 +96,11 @@ class Player {
 // Instantiation of player and enemies
 const player = new Player();    
 const allEnemies = [];
-
-
+// 3 enemies with random speed between 100 and 500
+for (let i = 1; i <= 3; i++) {
+    const bug = new Enemy(-i*101, i*83, Math.floor(Math.random()*401)+100);
+    allEnemies.push(bug);
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
