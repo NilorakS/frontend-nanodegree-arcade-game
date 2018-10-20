@@ -55,7 +55,12 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        win.requestAnimationFrame(main);
+        if (player.victory === true) {
+            win.cancelAnimationFrame(win.requestAnimationFrame(main));
+        } else {
+            win.requestAnimationFrame(main);
+        }
+
     }
 
     /* This function does some initial setup that should only occur once,
@@ -69,18 +74,13 @@ var Engine = (function(global) {
     }
 
     /* This function is called by main (our game loop) and itself calls all
-     * of the functions which may need to update entity's data. Based on how
-     * you implement your collision detection (when two entities occupy the
-     * same space, for instance when your character should die), you may find
-     * the need to add an additional function call here. For now, we've left
-     * it commented out - you may or may not want to implement this
-     * functionality this way (you could just implement collision detection
-     * on the entities themselves within your app.js file).
+     * of the functions which may need to update entity's data. 
      */
 
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
+        checkVictory();
     }
 
     /* This is called by the update function and loops through all of the
@@ -96,6 +96,35 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+    }
+
+    /* This function checks for collisions of the player and enemies
+     * by comparing their vertical and horizontal position on the board.
+     */
+
+    function checkCollisions() {
+        for(let enemy of allEnemies) {
+            if (enemy.yPos === player.yPos && ((enemy.xPos + enemy.stepX*0.5 > player.xPos) && (enemy.xPos < player.xPos + player.stepX*0.5))) {
+                player.reset();
+            }
+        }
+    }
+
+    /* This function handles a victory by displaying a winner message and 
+    resetting the game.
+     */
+
+    function checkVictory() {
+        if (player.victory === true) {
+            swal("Congratulations!", "You have successfully reached the water!", "success", {
+                button: "PLAY AGAIN",
+            }).then((willPlayAgain) => {
+                if (willPlayAgain) {
+                    player.reset();                            
+                    win.requestAnimationFrame(main);
+                }             
+            })
+        }
     }
 
     /* This function initially draws the "game level", it will then call

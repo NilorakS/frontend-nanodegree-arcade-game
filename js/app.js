@@ -47,18 +47,13 @@ class Player {
         this.initYPos = (this.stepY*5)-20;  // 20 px padding for centering
         this.xPos = this.initXPos;
         this.yPos = this.initYPos;
+        // Set the victory state
+        this.victory = false;
     }
 
     // Update the player's position
     update() {
-        // Check for collision with enemy 
-        for(let enemy of allEnemies) {
-            if (enemy.yPos === this.yPos && ((enemy.xPos + enemy.stepX*0.5 > this.xPos) && (enemy.xPos < this.xPos + this.stepX*0.5))) {
-                this.reset();
-            }
-        }
-
-        // Check for victory (xPos && yPos == final tiles)
+        
     }
 
     // Draw the player on the screen
@@ -77,6 +72,9 @@ class Player {
             case 'up':
                 if (this.yPos > this.stepY) {
                     this.yPos -= this.stepY;
+                // Winning condition
+                } else if (this.yPos === 63) {
+                    this.victory = true;
                 }
                 break;
             case 'right':
@@ -93,12 +91,11 @@ class Player {
 
     }
 
-    // Reset position in case of collision or victory
+    // Reset status and position in case of collision or victory
     reset() {
-        setTimeout(() => {
+        this.victory = false;
         this.xPos = this.initXPos;
-        this.yPos = this.initYPos;
-        }, 50);
+        this.yPos = this.initYPos;   
     }
 }
 
