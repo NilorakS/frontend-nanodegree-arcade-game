@@ -44,16 +44,19 @@ class Player {
         this.stepY = 83;
         // Set the initial location
         this.initXPos = this.stepX*2;
-        this.initYPos = (this.stepY*5)-10;  // 10 px padding for centering
+        this.initYPos = (this.stepY*5)-20;  // 20 px padding for centering
         this.xPos = this.initXPos;
         this.yPos = this.initYPos;
     }
 
     // Update the player's position
     update() {
-        // can be similar to the one for the Enemy
-
-        // Check for collision with enemy (same xPos && yPos)
+        // Check for collision with enemy 
+        for(let enemy of allEnemies) {
+            if (enemy.yPos === this.yPos && ((enemy.xPos + enemy.stepX*0.5 > this.xPos) && (enemy.xPos < this.xPos + this.stepX*0.5))) {
+                this.reset();
+            }
+        }
 
         // Check for victory (xPos && yPos == final tiles)
     }
@@ -91,6 +94,12 @@ class Player {
     }
 
     // Reset position in case of collision or victory
+    reset() {
+        setTimeout(() => {
+        this.xPos = this.initXPos;
+        this.yPos = this.initYPos;
+        }, 50);
+    }
 }
 
 // Instantiation of player and enemies
