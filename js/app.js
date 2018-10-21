@@ -111,13 +111,23 @@ class Player {
 }
 
 // Instantiation of player and 3 enemies
-let player = new Player();    
-const allEnemies = [];
-for (let i = 2; i <= numberOfRows - numberOfGrassRows; i++) {
-    const startXPos = -i*tileWidth;
-    const randomSpeed = Math.floor(Math.random()*401)+100;  // random speed between 100 and 500
-    const bug = new Enemy(i, startXPos, randomSpeed);
-    allEnemies.push(bug);
+let player;   
+let allEnemies; 
+createPlayer();
+createEnemies();
+
+function createPlayer() {
+    player = new Player();
+}
+
+function createEnemies() {   
+    allEnemies = [];   // Clear the array
+    for (let i = 2; i <= numberOfRows - numberOfGrassRows; i++) {
+        const startXPos = -i * tileWidth;
+        const randomSpeed = Math.floor(Math.random() * 401) + 100; // Random speed between 100 and 500
+        const bug = new Enemy(i, startXPos, randomSpeed);
+        allEnemies.push(bug);
+    }
 }
 
 // This listens for key presses and sends the keys to your
@@ -132,3 +142,5 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+

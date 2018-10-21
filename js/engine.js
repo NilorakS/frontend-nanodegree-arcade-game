@@ -55,10 +55,10 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        if (player.victory === true) {
-            win.cancelAnimationFrame(win.requestAnimationFrame(main));
-        } else {
+        if (!player.victory) {
             win.requestAnimationFrame(main);
+        } else {
+            win.cancelAnimationFrame(win.requestAnimationFrame(main));
         }
 
     }
@@ -100,13 +100,21 @@ var Engine = (function(global) {
 
     /* This function checks for collisions of the player and enemies
      * by comparing their vertical and horizontal position on the board.
+     * In case of collision, a new player is created.
      */
 
     function checkCollisions() {
         for(let enemy of allEnemies) {
-            if (enemy.yPos === player.yPos && ((enemy.xPos + enemy.stepX*0.5 > player.xPos) && (enemy.xPos < player.xPos + player.stepX*0.5))) {
-                player = new Player();
+            if (enemy.currentRow !== player.currentRow) {
+                continue;
             }
+            if (enemy.xPos + tileWidth * 0.5 < player.xPos) {
+                continue;
+            }
+            if (enemy.xPos > player.xPos + tileWidth * 0.5) {
+                continue;
+            }
+            createPlayer();
         }
     }
 
@@ -115,16 +123,18 @@ var Engine = (function(global) {
      */
 
     function checkVictory() {
-        if (player.victory === true) {
-            swal("Congratulations!", "You have successfully reached the water!", "success", {
-                button: "PLAY AGAIN",
-            }).then((willPlayAgain) => {
-                if (willPlayAgain) {
-                    player = new Player();                            
-                    win.requestAnimationFrame(main);
-                }             
-            })
+        if (!player.victory) {
+            return;
         }
+        swal("Congratulations!", "You have successfully reached the water!", "success", {
+            button: "PLAY AGAIN",
+        }).then((willPlayAgain) => {
+            if (willPlayAgain) {
+                createPlayer();
+                createEnemies();   
+                init();                                 
+            }             
+        })
     }
 
     /* This function initially draws the "game level", it will then call
