@@ -6,37 +6,32 @@ const playerStartRow = 6;
 const playerStartColumn = 3;
 const numberOfRows = 6;
 const numberOfColumns = 5;
-
+const numberOfGrassRows = 2;
 
 
 // Enemies our player must avoid
 class Enemy {
-    constructor(initXPos, yPos, speed) {
+    constructor(row, startXPos, speed) {
         // Load the image/sprite 
         this.sprite = 'images/enemy-bug.png';
-        // Set the horizontal step size
-        this.stepX = 101;
-        // Set the movement radius
-        this.boundary = this.stepX*5;
-        // Set the speed
-        this.speed = speed;
         // Set the initial location
-        this.initXPos = initXPos;
-        this.xPos = this.initXPos;
-        this.yPos = yPos-20;    // 20 px padding for centering
+        this.currentRow = row;
+        this.startXPos = startXPos;   
+        this.xPos = startXPos;
         
+        this.speed = speed;       
     }
     
     // Update the enemy's position 
     update(dt) {
-        // Enemy moves until off screen
-        if(this.xPos < this.boundary) {
-            this.xPos += this.speed*dt;
-        } 
-        // Then reset its position
-        else {
-            this.xPos = this.initXPos;
+        // Enemy moves until off screen, then resets its position
+        if (this.xPos < numberOfColumns * tileWidth) {
+            this.xPos += this.speed * dt;
+        } else {
+            this.xPos = this.startXPos;
         }
+        
+        this.yPos = (tileHeight * (this.currentRow - 1)) - tilePaddingY;  // padding for centering   
     }
 
     // Draw the enemy on the screen
@@ -44,6 +39,7 @@ class Enemy {
         ctx.drawImage(Resources.get(this.sprite), this.xPos, this.yPos);
     }
 };
+
 
 // Player
 class Player {
@@ -114,12 +110,13 @@ class Player {
 
 }
 
-// Instantiation of player and enemies
+// Instantiation of player and 3 enemies
 let player = new Player();    
 const allEnemies = [];
-// 3 enemies with random speed between 100 and 500
-for (let i = 1; i <= 3; i++) {
-    const bug = new Enemy(-i*101, i*83, Math.floor(Math.random()*401)+100);
+for (let i = 2; i <= numberOfRows - numberOfGrassRows; i++) {
+    const startXPos = -i*tileWidth;
+    const randomSpeed = Math.floor(Math.random()*401)+100;  // random speed between 100 and 500
+    const bug = new Enemy(i, startXPos, randomSpeed);
     allEnemies.push(bug);
 }
 
