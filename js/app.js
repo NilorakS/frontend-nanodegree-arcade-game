@@ -1,3 +1,14 @@
+// Global variables
+const tileWidth = 101;
+const tileHeight = 83;
+const tilePaddingY = 20;
+const playerStartRow = 6;
+const playerStartColumn = 3;
+const numberOfRows = 6;
+const numberOfColumns = 5;
+
+
+
 // Enemies our player must avoid
 class Enemy {
     constructor(initXPos, yPos, speed) {
@@ -39,21 +50,17 @@ class Player {
     constructor() {
         // Load the image/sprite
         this.sprite = 'images/char-princess-girl.png';
-        // Set the horizontal and vertical step size
-        this.stepX = 101;
-        this.stepY = 83;
-        // Set the initial location
-        this.initXPos = this.stepX*2;
-        this.initYPos = (this.stepY*5)-20;  // 20 px padding for centering
-        this.xPos = this.initXPos;
-        this.yPos = this.initYPos;
+        // Set the initial location        
+        this.currentRow = playerStartRow;
+        this.currentColumn = playerStartColumn;
         // Set the victory state
         this.victory = false;
     }
 
     // Update the player's position
     update() {
-        
+        this.xPos = tileWidth * (this.currentColumn - 1);
+        this.yPos = (tileHeight * (this.currentRow - 1)) - tilePaddingY;  // padding for centering   
     }
 
     // Draw the player on the screen
@@ -65,42 +72,50 @@ class Player {
     handleInput(input) {
         switch(input) {
             case 'left':
-                if(this.xPos > 0) {
-                    this.xPos -= this.stepX;
-                }
+                this.moveLeft();
                 break;
             case 'up':
-                if (this.yPos > this.stepY) {
-                    this.yPos -= this.stepY;
-                // Winning condition
-                } else if (this.yPos === 63) {
-                    this.victory = true;
-                }
+                this.moveUp();
                 break;
             case 'right':
-                if (this.xPos < this.stepX*4) {
-                    this.xPos += this.stepX;
-                }
+                this.moveRight();
                 break;
             case 'down':
-                if (this.yPos < this.stepY*4) {
-                    this.yPos += this.stepY;
-                }
+                this.moveDown();
                 break;
         }
 
     }
-
-    // Reset status and position in case of collision or victory
-    reset() {
-        this.victory = false;
-        this.xPos = this.initXPos;
-        this.yPos = this.initYPos;   
+    moveLeft() {
+        if (this.currentColumn > 1) {
+            this.currentColumn -= 1;
+        }
     }
+
+    moveUp() {
+        this.currentRow -= 1;            
+        // Winning condition
+        if (this.currentRow === 1) {
+            this.victory = true;
+        }
+    }
+
+    moveRight() {
+        if (this.currentColumn < numberOfColumns) {
+            this.currentColumn += 1;
+        }
+    }
+
+    moveDown() {
+        if (this.currentRow < numberOfRows) {
+            this.currentRow += 1;
+        }
+    }
+
 }
 
 // Instantiation of player and enemies
-const player = new Player();    
+let player = new Player();    
 const allEnemies = [];
 // 3 enemies with random speed between 100 and 500
 for (let i = 1; i <= 3; i++) {

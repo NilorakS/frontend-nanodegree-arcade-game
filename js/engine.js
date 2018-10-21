@@ -105,7 +105,7 @@ var Engine = (function(global) {
     function checkCollisions() {
         for(let enemy of allEnemies) {
             if (enemy.yPos === player.yPos && ((enemy.xPos + enemy.stepX*0.5 > player.xPos) && (enemy.xPos < player.xPos + player.stepX*0.5))) {
-                player.reset();
+                player = new Player();
             }
         }
     }
@@ -120,7 +120,7 @@ var Engine = (function(global) {
                 button: "PLAY AGAIN",
             }).then((willPlayAgain) => {
                 if (willPlayAgain) {
-                    player.reset();                            
+                    player = new Player();                            
                     win.requestAnimationFrame(main);
                 }             
             })
