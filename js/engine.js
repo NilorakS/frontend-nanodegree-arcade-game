@@ -108,10 +108,10 @@ var Engine = (function(global) {
             if (enemy.currentRow !== player.currentRow) {
                 continue;
             }
-            if (enemy.xPos + tileWidth * 0.5 < player.xPos) {
+            if (enemy.xPos + TILE_WIDTH * 0.5 < player.xPos) {
                 continue;
             }
-            if (enemy.xPos > player.xPos + tileWidth * 0.5) {
+            if (enemy.xPos > player.xPos + TILE_WIDTH * 0.5) {
                 continue;
             }
             createPlayer();

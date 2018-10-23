@@ -1,12 +1,12 @@
 // Global variables
-const tileWidth = 101;
-const tileHeight = 83;
-const tilePaddingY = 20;
-const playerStartRow = 6;
-const playerStartColumn = 3;
-const numberOfRows = 6;
-const numberOfColumns = 5;
-const numberOfGrassRows = 2;
+const TILE_WIDTH = 101;
+const TILE_HEIGHT = 83;
+const TILE_PADDING_Y = 20;
+const PLAYER_START_ROW = 6;
+const PLAYER_START_COLUMN = 3;
+const NUMBER_OF_ROWS = 6;
+const NUMBER_OF_COLUMNS = 5;
+const NUMBER_OF_GRASS_ROWS = 2;
 
 
 // Enemies our player must avoid
@@ -25,13 +25,13 @@ class Enemy {
     // Update the enemy's position 
     update(dt) {
         // Enemy moves until off screen, then resets its position
-        if (this.xPos < numberOfColumns * tileWidth) {
+        if (this.xPos < NUMBER_OF_COLUMNS * TILE_WIDTH) {
             this.xPos += this.speed * dt;
         } else {
             this.xPos = this.startXPos;
         }
         
-        this.yPos = (tileHeight * (this.currentRow - 1)) - tilePaddingY;  // padding for centering   
+        this.yPos = (TILE_HEIGHT * (this.currentRow - 1)) - TILE_PADDING_Y;  // padding for centering   
     }
 
     // Draw the enemy on the screen
@@ -47,16 +47,16 @@ class Player {
         // Load the image/sprite
         this.sprite = 'images/char-princess-girl.png';
         // Set the initial location        
-        this.currentRow = playerStartRow;
-        this.currentColumn = playerStartColumn;
+        this.currentRow = PLAYER_START_ROW;
+        this.currentColumn = PLAYER_START_COLUMN;
         // Set the victory state
         this.victory = false;
     }
 
     // Update the player's position
     update() {
-        this.xPos = tileWidth * (this.currentColumn - 1);
-        this.yPos = (tileHeight * (this.currentRow - 1)) - tilePaddingY;  // padding for centering   
+        this.xPos = TILE_WIDTH * (this.currentColumn - 1);
+        this.yPos = (TILE_HEIGHT * (this.currentRow - 1)) - TILE_PADDING_Y;  // padding for centering   
     }
 
     // Draw the player on the screen
@@ -97,13 +97,13 @@ class Player {
     }
 
     moveRight() {
-        if (this.currentColumn < numberOfColumns) {
+        if (this.currentColumn < NUMBER_OF_COLUMNS) {
             this.currentColumn += 1;
         }
     }
 
     moveDown() {
-        if (this.currentRow < numberOfRows) {
+        if (this.currentRow < NUMBER_OF_ROWS) {
             this.currentRow += 1;
         }
     }
@@ -122,11 +122,11 @@ function createPlayer() {
 
 function createEnemies() {   
     allEnemies = [];   // Clear the array
-    for (let i = 2; i <= numberOfRows - numberOfGrassRows; i++) {
-        const startXPos = -i * tileWidth;
-        const randomSpeed = Math.floor(Math.random() * 401) + 100; // Random speed between 100 and 500
-        const bug = new Enemy(i, startXPos, randomSpeed);
-        allEnemies.push(bug);
+    for (let i = 2; i <= NUMBER_OF_ROWS - NUMBER_OF_GRASS_ROWS; i++) {
+        const START_X_POS = -i * TILE_WIDTH;
+        const RANDOM_SPEED = Math.floor(Math.random() * 401) + 100; // Random speed between 100 and 500
+        const BUG = new Enemy(i, START_X_POS, RANDOM_SPEED);
+        allEnemies.push(BUG);
     }
 }
 
