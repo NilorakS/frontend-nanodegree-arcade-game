@@ -1,4 +1,15 @@
-// Global variables
+/* App.js
+ * This file provides the game character classes (superclass Character, child
+ * classes Player and Enemy) and defines their methods. The update and render
+ * methods are called on the player and enemy objects in the engine.js file,
+ * the handleInput method is triggered by a key press event.
+ * 
+ * This file also instantiates the player and enemy objects and stores the
+ * enemies in an Array.
+ */
+
+
+// Global variables defining the game board
 const TILE_WIDTH = 101;
 const TILE_HEIGHT = 83;
 const TILE_PADDING_Y = 20;
@@ -9,7 +20,9 @@ const NUMBER_OF_COLUMNS = 5;
 const NUMBER_OF_GRASS_ROWS = 2;
 
 
-// Enemies our player must avoid
+/* This class describes the properties and methods of the enemies 
+ * our player must avoid 
+ */
 class Enemy {
     constructor(row, startXPos, speed) {
         // Load the image/sprite 
@@ -41,7 +54,9 @@ class Enemy {
 };
 
 
-// Player
+/* 
+ * This class describes the properties and methods of our player
+ */
 class Player {
     constructor() {
         // Load the image/sprite
@@ -130,8 +145,9 @@ function createEnemies() {
     }
 }
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/* This listens for key presses and sends the keys to your
+ * Player.handleInput() method. You don't need to modify this.
+ */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
