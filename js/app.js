@@ -19,64 +19,69 @@ const NUMBER_OF_ROWS = 6;
 const NUMBER_OF_COLUMNS = 5;
 const NUMBER_OF_GRASS_ROWS = 2;
 
-
-/* This class describes the properties and methods of the enemies 
- * our player must avoid 
+/* This superclass encapsulates properties and methods common to both Enemy 
+ * and Player 
  */
-class Enemy {
-    constructor(row, startXPos, speed) {
-        // Load the image/sprite 
-        this.sprite = 'images/enemy-bug.png';
-        // Set the initial location
+class Character {
+    constructor(sprite, row) {
+        this.sprite = sprite;
         this.currentRow = row;
+    }
+
+    update() {
+        this.yPos = (TILE_HEIGHT * (this.currentRow - 1)) - TILE_PADDING_Y;  // padding for centering   
+    }
+
+    // Draw the character on the screen
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.xPos, this.yPos);
+    }
+
+}
+
+
+/* This class describes the specific properties and methods of the enemies 
+ * our player must avoid
+*/ 
+class Enemy extends Character {
+    constructor(row, startXPos, speed) {
+        super('images/enemy-bug.png', row);
+
         this.startXPos = startXPos;   
-        this.xPos = startXPos;
-        
+        this.xPos = startXPos;        
         this.speed = speed;       
     }
     
-    // Update the enemy's position 
+    /* Update the enemy's position by moving it until off screen, then reset 
+     * its position  
+     */
     update(dt) {
-        // Enemy moves until off screen, then resets its position
+        super.update();
+        
         if (this.xPos < NUMBER_OF_COLUMNS * TILE_WIDTH) {
             this.xPos += this.speed * dt;
         } else {
             this.xPos = this.startXPos;
         }
-        
-        this.yPos = (TILE_HEIGHT * (this.currentRow - 1)) - TILE_PADDING_Y;  // padding for centering   
     }
-
-    // Draw the enemy on the screen
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.xPos, this.yPos);
-    }
-};
+}
 
 
 /* 
- * This class describes the properties and methods of our player
+ * This class describes the specific properties and methods of our player
  */
-class Player {
+class Player extends Character {
     constructor() {
-        // Load the image/sprite
-        this.sprite = 'images/char-princess-girl.png';
-        // Set the initial location        
-        this.currentRow = PLAYER_START_ROW;
+        super('images/char-princess-girl.png', PLAYER_START_ROW);
+
         this.currentColumn = PLAYER_START_COLUMN;
-        // Set the victory state
         this.victory = false;
     }
 
     // Update the player's position
     update() {
+        super.update();
         this.xPos = TILE_WIDTH * (this.currentColumn - 1);
-        this.yPos = (TILE_HEIGHT * (this.currentRow - 1)) - TILE_PADDING_Y;  // padding for centering   
-    }
-
-    // Draw the player on the screen
-    render() {
-        ctx.drawImage(Resources.get(this.sprite), this.xPos, this.yPos);
     }
 
     // Handle keyboard input
@@ -122,7 +127,6 @@ class Player {
             this.currentRow += 1;
         }
     }
-
 }
 
 // Instantiation of player and 3 enemies
